@@ -1,7 +1,10 @@
 import {useState} from "react";
 import axios from "axios";
 
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
 const Newsletter = () => {
+
 
     const [email, setEmail] = useState('');
     const [success, setSuccess] = useState(false);
@@ -9,9 +12,7 @@ const Newsletter = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
 
-    function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    }
+
     async function addToNewsletter(event, email) {
         event.preventDefault()
         await axios.post(import.meta.env.VITE_NEWSLETTER_API, {email: email}) // .env.local file erstellen und VITE_NEWSLETTER_API=https://localhost:3000/subscribe eintragen (SIEHE https://vitejs.dev/guide/env-and-mode)
@@ -50,12 +51,12 @@ const Newsletter = () => {
                           className="sm:border border-primary flex-col sm:flex-row flex items-center lg:w-5/12 w-full mt-12 space-y-4 sm:space-y-0">
                         <input
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border border-primary sm:border-transparent text-base w-full font-medium leading-none text-primary p-4 focus:outline-none bg-transparent placeholder-primary"
+                            className={`border border-primary sm:border-transparent text-base w-full font-medium leading-none p-4 focus:outline-none bg-transparent placeholder-primary ${isValidEmail(email) ? 'text-orange-700' : 'text-gray-600'}`}
                             placeholder="Email Addresse"
                         />
                         <button
                             disabled={!email}
-                            className={`focus:outline-none focus:ring-offset-2 focus:ring border border-primary sm:border-transparent w-full sm:w-auto py-4 px-6 ${email ? 'bg-white hover:bg-opacity-85 text-orange-700 hover:text-orange-900' : 'text-gray-600'}`}>
+                            className={`focus:outline-none focus:ring-offset-2 focus:ring border border-primary sm:border-transparent w-full sm:w-auto py-4 px-6 ${isValidEmail(email) ? 'bg-white hover:bg-opacity-85 text-orange-700 hover:text-orange-900' : 'text-gray-600'}`}>
                             Abonnieren
                         </button>
                     </form>
